@@ -4,25 +4,38 @@ const cheerio = require('cheerio');
 const axios = require('axios');
 
 
-const websiteURL = 'http://books.toscrape.com'
+// goal of this tutorial
+/// get countries list
+/// get name and iso code of each country
+
+// website url page to scrape
+const websiteURL = 'https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3'
 
 
+// fetching data
 app.get('/', (req, res) => {
     axios(websiteURL)
         .then(response => {
             const html = response.data
-            const $ = cheerio.load(html)
-            const content = []
+            const $ = cheerio.load(html) // load fetched data
+            const countries = []; // storing data of all countries
 
-            $('.product_pod', html).each(function () { 
-                const title = $(this).find('.star-rating Three').text()
-                const websiteURL = $(this).find('a').attr('href')
-                content.push({
-                    title,
-                    websiteURL
-                 })
+            // select classname and use each method 
+            $('.plainlist ul li', html).each(function () {
+
+                // data of each country 
+                const country = { name: "", iso3: "" };
+                country.name = $(this).children("a").text();
+                country.iso3 = $(this).children("span").text();
+
+                 // populate countries with each country data
+                countries.push({
+                    country
+                })
             })
-            res.json(content)
+
+            // get data
+            res.json(countries)
         }).catch(err => console.log(err))
 
 })
