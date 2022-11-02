@@ -45,7 +45,6 @@ app.get('/', (req, res) => {
 PORT = 8080
 
 // running server
-app.listen(PORT, async (req, res, err) => {
-    if (err) return console.log(err)
-    else console.log(`server is running on ${PORT}`)
+app.listen(PORT,  () => {
+    console.log(`server is running on ${PORT}`)
 });
